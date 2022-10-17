@@ -9,7 +9,7 @@ namespace OCR
         {
 
             InitializeComponent();
-
+            
 
         }
 
@@ -52,8 +52,6 @@ namespace OCR
                 progressBar1.Value = 0;
                 richTextBox1.Text = "";
             }
-
-
 
 
 
