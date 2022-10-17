@@ -12,10 +12,15 @@ namespace OCR
             
 
         }
-
+        delegate void RefreshProgressDelegate(int percent);
+        public void RefreshProgress(int value)
+        {
+            if (this == null) return;
+            progressBar1.Value = (int)value;
+        }
         private void button1_Click(object sender, EventArgs e)
         {
-            progressBar1.Value = 30;
+            this.Invoke(new RefreshProgressDelegate(RefreshProgress), 30);
             OpenFileDialog ofd = new OpenFileDialog();
             DialogResult dd = ofd.ShowDialog();
 
@@ -24,7 +29,7 @@ namespace OCR
             if (dd == DialogResult.OK)
             {
                 progressBar1.PerformStep();
-                progressBar1.Value = 60;
+                this.Invoke(new RefreshProgressDelegate(RefreshProgress), 60);
                 var Ocr = new IronTesseract();
 
                 textBox1.Text = ofd.FileName;
@@ -33,7 +38,7 @@ namespace OCR
                 {
                     input.AddPdf(ofd.FileName, textBox2.Text);
                     var Result = Ocr.Read(input);
-                    progressBar1.Value = 75;
+                    this.Invoke(new RefreshProgressDelegate(RefreshProgress), 75);
                     Console.WriteLine(Result.Text);
                     MessageBox.Show($"{Result.Pages.Count()} páginas procesadas","Terminado");
                     Console.WriteLine($"{Result.Pages.Count()} páginas procesadas");
@@ -41,7 +46,7 @@ namespace OCR
                     richTextBox1.Text = Result.Text;
 
 
-                    progressBar1.Value = 100;
+                    this.Invoke(new RefreshProgressDelegate(RefreshProgress), 100);
                     // 1 page for every page of the PDF
                 }
 
